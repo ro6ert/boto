@@ -468,6 +468,8 @@ class AWSAuthConnection(object):
         if config.has_option('Boto', 'is_secure'):
             is_secure = config.getboolean('Boto', 'is_secure')
         self.is_secure = is_secure
+        if EUCALYPTUSFLAG:
+            self.is_secure = False
         # Whether or not to validate server certificates.
         # The default is now to validate certificates.  This can be
         # overridden in the boto config file are by passing an
@@ -907,6 +909,15 @@ class AWSAuthConnection(object):
             params = {}
         else:
             params = params.copy()
+        if EUCALYPTUSFLAG:
+            newdict = {}#FIXME (this is not the original. Original is blank)
+            for key in params:#FIXME (this is not the original. Original is blank)
+                if not key.startswith("Filter"):# and not key.startswith("Ip"):
+                    newdict[key] = params[key]
+            params = newdict #FIXME (this is not the original. original is blank)
+            #if "ToPort" in params and "GroupName" in params:
+            #    params["UserId"]="898163214701"
+
         if headers == None:
             headers = {}
         else:
@@ -1034,9 +1045,13 @@ class AWSQueryConnection(AWSAuthConnection):
             boto.log.error('Null body %s' % body)
             raise self.ResponseError(response.status, response.reason, body)
         elif response.status == 200:
-            rs = ResultSet(markers)
-            h = boto.handler.XmlHandler(rs, parent)
-            xml.sax.parseString(body, h)
+            if EUCALYPTUSFLAG:
+                from boto.channingFilter import channingFilter#changed state
+                rs = channingFilter(body,params,markers, parent)#changed state
+            else:
+                rs = ResultSet(markers)
+                h = boto.handler.XmlHandler(rs, parent)
+                xml.sax.parseString(body, h)
             return rs
         else:
             boto.log.error('%s %s' % (response.status, response.reason))
