@@ -173,7 +173,17 @@ class SecurityGroup(TaggedEC2Object):
                     src_group_group_id = src_group.group_id
                 else:
                     src_group_group_id = src_group.id
-        status = self.connection.authorize_security_group(group_name,
+        
+        if EUCALYPTUSFLAG:
+            status = self.connection.authorize_security_group_deprecated(group_name,
+                                                          src_group_name,
+                                                          src_group_owner_id,
+                                                          ip_protocol,
+                                                          from_port,
+                                                          to_port,
+                                                          cidr_ip)
+        else:
+            status = self.connection.authorize_security_group(group_name,
                                                           src_group_name,
                                                           src_group_owner_id,
                                                           ip_protocol,
@@ -211,7 +221,16 @@ class SecurityGroup(TaggedEC2Object):
                     src_group_group_id = src_group.group_id
                 else:
                     src_group_group_id = src_group.id
-        status = self.connection.revoke_security_group(group_name,
+        if EUCALYPTUSFLAG:
+            status = self.connection.revoke_security_group_deprecated(group_name,
+                                                       src_group_name,
+                                                       src_group_owner_id,
+                                                       ip_protocol,
+                                                       from_port,
+                                                       to_port,
+                                                       cidr_ip)
+        else:
+            status = self.connection.revoke_security_group(group_name,
                                                        src_group_name,
                                                        src_group_owner_id,
                                                        ip_protocol,
