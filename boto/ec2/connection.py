@@ -31,6 +31,7 @@ from datetime import datetime
 from datetime import timedelta
 
 import boto
+from boto.__init__ import EUCALYPTUSFLAG
 from boto.connection import AWSQueryConnection
 from boto.resultset import ResultSet
 from boto.ec2.image import Image, ImageAttribute
@@ -81,6 +82,7 @@ class EC2Connection(AWSQueryConnection):
         """
         Init method to create a new connection to EC2.
         """
+        
         if api_version is None and EUCALYPTUSFLAG:
             api_version = "2011-01-01"
         if not region:

@@ -66,6 +66,7 @@ import boto.utils
 import boto.handler
 import boto.cacerts
 
+from boto.__init__ import EUCALYPTUSFLAG
 from boto import config, UserAgent
 from boto.exception import AWSConnectionError, BotoClientError
 from boto.exception import BotoServerError

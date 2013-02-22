@@ -36,6 +36,7 @@ import logging.config
 import urlparse
 from boto.exception import InvalidUriError
 
+EUCALYPTUSFLAG = True
 __version__ = '2.8.0-dev'
 Version = __version__  # for backware compatibility
 
